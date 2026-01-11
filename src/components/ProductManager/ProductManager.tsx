@@ -8,6 +8,7 @@ import { ALL_CATEGORIES } from '../../utils/const';
 import { CategoryOption } from '../CategoryFilter/types';
 
 import type { Product } from '../../types/Product';
+import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 export const ProductManager: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -20,32 +21,19 @@ export const ProductManager: React.FC = () => {
   }, []);
 
   return (
-    <div className="product-manager">
-      <div className="filters">
+    <Box className="product-manager">
+      <Box className="filters">
         <CategoryFilter selected={category} />
-        <div className="text-filter">
-          <label htmlFor="search-input">Buscar:</label>
-          <input
-            id="search-input"
-            type="text"
-            placeholder="Nombre o categoría"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="stock-filter">
-          <label>
-            <input
-              type="checkbox"
-              checked={inStockOnly}
-              onChange={(e) => setInStockOnly(e.target.checked)}
-            />
-            Solo con stock
-          </label>
-        </div>
-      </div>
+        <Box>
+          <TextField label="Buscar:" placeholder="Nombre o categoría" variant="outlined" size="small" onChange={(e) => setSearch(e.target.value)} />
+          {'your search value is ' + search}
+        </Box>
+        <Box className="stock-filter">
+          <FormControlLabel control={<Checkbox checked={inStockOnly} onChange={(e) => setInStockOnly(e.target.checked)} />} label="Solo con stock" />
+        </Box>
+      </Box>
       <ProductList productList={products} />
-    </div>
+    </Box>
   );
 };
 
