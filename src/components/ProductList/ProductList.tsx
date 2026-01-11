@@ -1,5 +1,7 @@
 import React from 'react';
 import { Product } from '../../types/Product';
+import { Box } from '@mui/material';
+import CardProduct from './CardProduct/CardProduct';
 
 interface ProductListProps {
   productList: Product[];
@@ -8,16 +10,13 @@ interface ProductListProps {
 export const ProductList: React.FC<ProductListProps> = ({
   productList,
 }) => {
-  return <div>
-    Product List Component
-    <div>
+  return (
+    <Box className="product-list" sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))' }}>
       {productList.map((product) => (
-        <div key={product.id}>
-          {product.name} - {product.category} - ${product.price}
-        </div>
+        <CardProduct key={product.id} product={product} />
       ))}
-    </div>
-  </div>;
+    </Box>
+  );
 };
 
 export default ProductList;
