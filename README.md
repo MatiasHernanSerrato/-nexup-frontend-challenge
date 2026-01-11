@@ -59,3 +59,92 @@ El objetivo de este challenge es armar un listado de productos que pueda ser fil
 - Eficiencia: La lógica debe ser eficiente y bien estructurada.
 - Estilado correcto del código
 
+---
+
+## Implementación (esta solución)
+
+### Resumen
+Aplicación en React + TypeScript con Material UI que lista productos, permite filtrar por categoría, búsqueda y stock, e incluye estados de carga y vacío. Se optimiza la búsqueda con `useDeferredValue` y se unifican estilos con variables CSS globales (colores, espaciados, radios).
+
+### Stack
+- React 18 + TypeScript
+- Material UI (`@mui/material`)
+- CRA (`react-scripts`) para desarrollo y build
+
+### Cómo correr el proyecto
+
+```bash
+npm install
+npm start
+```
+
+Scripts útiles:
+
+```bash
+npm run build     # Compila producción
+npm test          # Ejecuta tests por defecto de CRA
+npm run lint      # Lint de archivos TS/TSX
+npm run lint:fix  # Auto-fix de ESLint/Prettier
+```
+
+### Arquitectura de componentes
+- Contenedor: [src/components/ProductManager/ProductManager.tsx](src/components/ProductManager/ProductManager.tsx)
+   - Orquesta fetch de datos, estado global de filtros (`categoría`, `búsqueda`, `solo stock`) y renderiza contenido según estado (`loading`, `empty`, `list`).
+   - Optimiza búsqueda con `useDeferredValue` para evitar re-render costoso mientras se escribe.
+- Lista: [src/components/ProductList/ProductList.tsx](src/components/ProductList/ProductList.tsx)
+   - Renderiza una grilla responsive con CSS Grid.
+- Tarjeta: [src/components/ProductList/CardProduct/CardProduct.tsx](src/components/ProductList/CardProduct/CardProduct.tsx)
+   - Muestra nombre, categoría, precio, estado y stock con `Chip` y badge de color.
+   - Usa `statusColor` para colorear el estado.
+- Filtro de categoría: [src/components/CategoryFilter/CategoryFilter.tsx](src/components/CategoryFilter/CategoryFilter.tsx)
+   - `Select` de MUI con opción `Todos` y categorías definidas.
+
+Patrón de barrels (`components/<Nombre>/index.ts`):
+- [src/components/ProductManager/index.ts](src/components/ProductManager/index.ts)
+- [src/components/ProductList/index.ts](src/components/ProductList/index.ts)
+- [src/components/CategoryFilter/index.ts](src/components/CategoryFilter/index.ts)
+
+Estos archivos re-exportan el componente principal y permiten imports más limpios: en [src/App.tsx](src/App.tsx) se importa `ProductManager` desde la carpeta, no desde el archivo directo.
+
+### Datos y tipos
+- Productos mock: [src/api/products.ts](src/api/products.ts)
+- Fetch simulado: [src/api/services.ts](src/api/services.ts) (`fetchProductList` con pequeño delay)
+- Tipos:
+   - [src/types/Product.ts](src/types/Product.ts)
+   - [src/types/ProductCategory.ts](src/types/ProductCategory.ts)
+   - [src/types/ProductStatus.ts](src/types/ProductStatus.ts)
+- Constantes: [src/utils/const.ts](src/utils/const.ts) (`ALL_CATEGORIES`)
+- Utilidades:
+   - [src/utils/utils.ts](src/utils/utils.ts) (`formatPrice`)
+   - [src/utils/statusColor.ts](src/utils/statusColor.ts) (`statusColor` mapea `Active`/`Inactive` a colores)
+
+### Estilos y UX
+- Variables CSS globales y layout: [src/index.css](src/index.css)
+   - Variables de espaciado, radios y colores
+   - Contenedor `.product-manager` con ancho máximo
+   - Panel de filtros con fondo, borde y `flex-wrap`
+   - Grilla `.product-list` y hover sutil de tarjetas `.product`
+   - Estado vacío `.empty-state` consistente con el tema
+- Título y wrapper: [src/App.tsx](src/App.tsx)
+- Componentes MUI con `size="small"`, `fullWidth` en búsqueda y `Chip` para categoría/stock.
+
+### Lógica de filtrado
+En [src/components/ProductManager/ProductManager.tsx](src/components/ProductManager/ProductManager.tsx):
+- Normaliza búsqueda (`trim` + `toLowerCase`) y aplica filtros combinados:
+   - Categoría (ignora si es `ALL_CATEGORIES`)
+   - Stock (`(product.stock ?? 0) > 0`)
+   - Texto (match en nombre + categoría)
+- Estados visuales:
+   - `loading`: muestra `CircularProgress`
+   - `empty`: tarjeta de mensaje
+   - `list`: renderiza [ProductList](src/components/ProductList/ProductList.tsx)
+
+### Accesibilidad
+- Labels descriptivos en filtros (e.g., "Categoría", "Buscar")
+- Indicador de estado con `aria-label` descriptivo en la tarjeta
+
+### Consideraciones futuras
+- Tema de MUI (palette/typography) para unificar más el estilo
+- Modo oscuro y persistencia de filtros (e.g., `localStorage`)
+
+
