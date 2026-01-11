@@ -1,4 +1,4 @@
-import { ProductStatus } from "../types/ProductStatus";
+import { ProductStatus } from '../types/ProductStatus';
 
 export const statusColor = (status: ProductStatus): string => {
     switch (status) {

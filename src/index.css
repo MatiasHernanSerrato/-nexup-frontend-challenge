@@ -11,3 +11,81 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Design tokens */
+:root {
+  --container-max: 1100px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-1: 6px;
+  --radius-2: 10px;
+  --color-bg: #f8fafc;
+  --color-card: #ffffff;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+}
+
+/* App container */
+.NexupFrontendChallenge {
+  background: var(--color-bg);
+  min-height: 100vh;
+  color: var(--color-text);
+}
+
+/* Manager layout */
+.product-manager {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.product-manager .filters {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+  padding: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.product-manager .filters > div {
+  min-width: 220px;
+  flex: 1;
+}
+
+.product-list {
+  gap: var(--space-4) !important; /* override MUI gap */
+}
+
+.product {
+  border-radius: var(--radius-2) !important;
+  border: 1px solid var(--color-border);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.product:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+}
